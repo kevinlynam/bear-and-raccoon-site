@@ -27,6 +27,21 @@
             flex-direction: column;
             gap: 1.5rem;
         }
+        /* Breathing Animation */
+        .breathe-circle {
+            width: 100px;
+            height: 100px;
+            background-color: #a8d5e2;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: breathe 10s infinite ease-in-out;
+        }
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.5; }
+            40% { transform: scale(1.8); opacity: 1; } /* 4 seconds inhale */
+            50% { transform: scale(1.8); opacity: 1; } /* 1 second hold */
+            100% { transform: scale(1); opacity: 0.5; } /* 5 seconds exhale */
+        }
         .card {
             background: white;
             padding: 25px;
@@ -107,7 +122,22 @@
             <h2>Just a reminder...</h2>
             <p class="love-note" id="daily-love-note">"Loading my love for you..."</p>
         </div>
+        
+        <div class="card" style="background-color: #f0f8ff; border: 2px solid #d0e8f2;">
+            <h2>Take a Breath</h2>
+            
+            <div style="display: flex; justify-content: center; margin: 30px 0;">
+                <div class="breathe-circle"></div>
+            </div>
+            <p style="color: #5b8c85; font-size: 0.9rem;">Follow the circle. Inhale as it grows, exhale as it shrinks.</p>
 
+            <hr style="border: 0; border-top: 1px solid #d0e8f2; margin: 25px 0;">
+
+            <h2>Need a little extra love?</h2>
+            <button class="btn" style="background-color: #5b8c85; margin-bottom: 15px;" onclick="getEmergencyHug()">Send an Emergency Hug</button>
+            <p id="hug-message" style="font-size: 1.1rem; font-weight: bold; color: #2c3e50; min-height: 50px;"></p>
+        </div>
+        
         <div class="card">
             <h2>Our Timeline</h2>
             <ul class="dates-list">
