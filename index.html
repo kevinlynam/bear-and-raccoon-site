@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Daily Adventure</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e74c3c;
+            --bg: #f9ebea;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        /* Adventure Section */
+        img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            background: #f0f0f0;
+            min-height: 300px;
+            object-fit: cover;
+        }
+        h1, h2 { margin-top: 0; color: var(--primary); }
+        .loading-text { color: #888; font-style: italic; }
+        
+        /* Buttons */
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .btn:hover { background-color: #1a252f; transform: translateY(-2px); }
+
+        /* Dashboard Elements */
+        .love-note {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--accent);
+            margin: 15px 0;
+        }
+        .dates-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 300px;
+        }
+        .dates-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .countdown-box {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            padding: 10px;
+            background: #fadbd8;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="card">
+            <h1>Our Daily Adventure</h1>
+            <img id="daily-image" src="" alt="Painting today's adventure...">
+            <p id="daily-message" class="loading-text">Waking up the Bear and Raccoon... (Takes ~15 secs)</p>
+            <button class="btn" onclick="downloadImage()">Download Today's Art</button>
+        </div>
+
+        <div class="card">
+            <h2>Just a reminder...</h2>
+            <p class="love-note" id="daily-love-note">"Loading my love for you..."</p>
+        </div>
+
+        <div class="card">
+            <h2>Our Timeline</h2>
+            <ul class="dates-list">
+                <li><span>First Date</span> <span>April 09, 2025</span></li>
+                <li><span>First 'I Love You's</span> <span>July 2025</span></li>
+                <li><span>Moved In</span> <span>SOON!</span></li>
+            </ul>
+            
+            <h2 style="margin-top: 25px;">Countdown to Hadestown</h2>
+            <div class="countdown-box" id="countdown">Calculating...</div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. FETCH THE AI ART
+        const workerUrl = 'https://bearandraccoon.kevinmlynam.workers.dev/'; // Ensure this is your live URL
+        
+        fetch(workerUrl)
+          .then(response => response.json())
+          .then(data => {
+              document.getElementById('daily-image').src = data.imageUrl;
+              document.getElementById('daily-message').innerText = data.message;
+              document.getElementById('daily-message').classList.remove('loading-text');
+          })
+          .catch(() => {
+              document.getElementById('daily-message').innerText = "The Bear and Raccoon are sleeping today.";
+          });
+
+        // 2. DOWNLOAD BUTTON LOGIC
+        function downloadImage() {
+            const imgSrc = document.getElementById('daily-image').src;
+            if (!imgSrc || imgSrc === "") return;
+            
+            const a = document.createElement('a');
+            a.href = imgSrc;
+            a.download = `Bear_and_Raccoon_${new Date().toISOString().split('T')[0]}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // 3. DAILY LOVE NOTE LOGIC
+        const loveNotes = [
+            "I love you more today than I did yesterday, but not as much as I will tomorrow.",
+            "You are my greatest adventure.",
+            "Every day with you is a good day.",
+            "I can't wait to see what the future holds for us.",
+            "You make the mundane things feel like magic."
+        ];
+        // Rotate note based on the day of the year
+        const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+        document.getElementById('daily-love-note').innerText = `"${loveNotes[dayOfYear % loveNotes.length]}"`;
+
+        // 4. COUNTDOWN LOGIC
+        // Set your target date here (Format: 'YYYY-MM-DD')
+        const targetDate = new Date('2026-05-05').getTime(); 
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').innerText = "It's here!";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').innerText = `${days} days to go!`;
+        }
+        
+        updateCountdown(); // Run once immediately
+        setInterval(updateCountdown, 86400000); // Update daily
+    </script>
+
+</body>
+</html>
