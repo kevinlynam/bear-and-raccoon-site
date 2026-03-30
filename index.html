@@ -321,6 +321,8 @@
 
         canvas.addEventListener('mousedown', handleInput);
         canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleInput(); }, {passive: false});
+        startScreen.addEventListener('mousedown', handleInput);
+        startScreen.addEventListener('touchstart', (e) => { e.preventDefault(); handleInput(); }, {passive: false});
         document.addEventListener('keydown', (e) => { if (e.code === 'Space') handleInput(); });
 
         function gameLoop() {
