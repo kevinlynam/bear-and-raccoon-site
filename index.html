@@ -218,6 +218,20 @@
         
         updateCountdown(); // Run once immediately
         setInterval(updateCountdown, 86400000); // Update daily
+
+        // EMERGENCY HUG LOGIC
+        const hugMessages = [
+            "Take a deep breath. I am so incredibly proud of you.",
+            "You are safe right now. This feeling is temporary and it will pass.",
+            "I love you so much. Close your eyes and imagine me holding your hand.",
+            "You don't have to figure everything out right now. Just rest.",
+            "You are the strongest person I know. Take all the time you need."
+        ];
+
+        function getEmergencyHug() {
+            const randomHug = hugMessages[Math.floor(Math.random() * hugMessages.length)];
+            document.getElementById('hug-message').innerText = `"${randomHug}"`;
+        }
     </script>
 
 </body>
