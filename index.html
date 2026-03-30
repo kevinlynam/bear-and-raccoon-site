@@ -132,6 +132,10 @@
             <p style="color: #5b8c85; font-size: 0.9rem;">Follow the circle. Inhale as it grows, exhale as it shrinks.</p>
 
             <hr style="border: 0; border-top: 1px solid #d0e8f2; margin: 25px 0;">
+
+            <h2>Need a little extra love?</h2>
+            <button class="btn" style="background-color: #5b8c85; margin-bottom: 15px;" onclick="getEmergencyHug()">Send an Emergency Hug</button>
+            <p id="hug-message" style="font-size: 1.1rem; font-weight: bold; color: #2c3e50; min-height: 50px;"></p>
         </div>
         
         <div class="card">
@@ -175,6 +179,7 @@
             a.click();
             document.body.removeChild(a);
         }
+
         // 3. DAILY LOVE NOTE LOGIC
         const loveNotes = [
             "I love you more everyday",
@@ -214,6 +219,18 @@
         updateCountdown(); // Run once immediately
         setInterval(updateCountdown, 86400000); // Update daily
 
+        // 5. ADDED: EMERGENCY HUG LOGIC
+        const hugMessages = [
+            "Take a deep breath. I am so incredibly proud of you.",
+            "You are safe right now. This feeling is temporary and it will pass.",
+            "I love you so much. Close your eyes and imagine me holding your hand.",
+            "You don't have to figure everything out right now. Just rest.",
+            "You are the strongest person I know. Take all the time you need."
+        ];
+
+        function getEmergencyHug() {
+            const randomHug = hugMessages[Math.floor(Math.random() * hugMessages.length)];
+            document.getElementById('hug-message').innerText = `"${randomHug}"`;
         }
     </script>
 
