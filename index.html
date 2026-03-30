@@ -179,21 +179,18 @@
             a.click();
             document.body.removeChild(a);
         }
+        // EMERGENCY HUG LOGIC
+        const hugMessages = [
+            "Take a deep breath. I am so incredibly proud of you.",
+            "You are safe right now. This feeling is temporary and it will pass.",
+            "I love you so much. Close your eyes and imagine me holding your hand.",
+            "You don't have to figure everything out right now. Just rest.",
+            "You are the strongest person I know. Take all the time you need."
+        ];
 
-        // 3. DAILY LOVE NOTE LOGIC
-        const loveNotes = [
-            "I love you more everyday",
-            "You make me feel valued and loved",
-            "Every day with you is a new adventure",
-            "I can't wait to spend the rest of our lives together", 
-            "You make a me a complete person",
-            "I love you more than all the stars in the sky",
-            "I will always protect and care for you",
-            "You are my everything",
-            "Nothing will stop my love for you baby",
-            "You make each day brighter",
-            "You are my favorite person",
-            "I love my life with you",
+        function getEmergencyHug() {
+            const randomHug = hugMessages[Math.floor(Math.random() * hugMessages.length)];
+            document.getElementById('hug-message').innerText = `"${randomHug}"`;
         ];
         // Rotate note based on the day of the year
         const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
@@ -219,18 +216,6 @@
         updateCountdown(); // Run once immediately
         setInterval(updateCountdown, 86400000); // Update daily
 
-        // EMERGENCY HUG LOGIC
-        const hugMessages = [
-            "Take a deep breath. I am so incredibly proud of you.",
-            "You are safe right now. This feeling is temporary and it will pass.",
-            "I love you so much. Close your eyes and imagine me holding your hand.",
-            "You don't have to figure everything out right now. Just rest.",
-            "You are the strongest person I know. Take all the time you need."
-        ];
-
-        function getEmergencyHug() {
-            const randomHug = hugMessages[Math.floor(Math.random() * hugMessages.length)];
-            document.getElementById('hug-message').innerText = `"${randomHug}"`;
         }
     </script>
 
