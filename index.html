@@ -247,6 +247,118 @@
             const randomHug = hugMessages[Math.floor(Math.random() * hugMessages.length)];
             document.getElementById('hug-message').innerText = `"${randomHug}"`;
         }
+        
+        // 6. KITTY GAME LOGIC
+        const canvas = document.getElementById('kittyGame');
+        const ctx = canvas.getContext('2d');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreEl = document.getElementById('final-score');
+
+        let kitty, obstacles, score, gameLoopId, isGameOver, frameCount;
+
+        function resetGame() {
+            // Setup the kitty's starting position and physics
+            kitty = { x: 50, y: 110, width: 30, height: 30, dy: 0, gravity: 0.5, jumpPower: -9, isJumping: false };
+            obstacles = [];
+            score = 0;
+            frameCount = 0;
+            isGameOver = false;
+            gameOverScreen.style.display = 'none';
+            
+            cancelAnimationFrame(gameLoopId);
+            gameLoop();
+        }
+
+        function jump() {
+            if (!kitty.isJumping && !isGameOver) {
+                kitty.dy = kitty.jumpPower;
+                kitty.isJumping = true;
+            } else if (isGameOver) {
+                resetGame();
+            }
+        }
+
+        // Listen for Spacebar, Mouse Click, or Phone Tap
+        canvas.addEventListener('mousedown', jump);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, {passive: false});
+        document.addEventListener('keydown', (e) => { if (e.code === 'Space') jump(); });
+
+        function gameLoop() {
+            if (isGameOver) return;
+            
+            // Clear the canvas for the next frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Kitty Physics (Gravity)
+            kitty.dy += kitty.gravity;
+            kitty.y += kitty.dy;
+
+            // Stop kitty from falling through the floor
+            if (kitty.y > 110) {
+                kitty.y = 110;
+                kitty.dy = 0;
+                kitty.isJumping = false;
+            }
+
+            // Draw the Kitty Emoji
+            ctx.font = "30px Arial";
+            ctx.fillText("🐈", kitty.x, kitty.y + 25);
+
+            // 2. Obstacles Logic
+            frameCount++;
+            // Make the game slightly harder over time by spawning faster
+            let spawnRate = Math.max(60, 100 - Math.floor(score * 2)); 
+            
+            if (frameCount % spawnRate === 0) { 
+                obstacles.push({ x: canvas.width, y: 115, width: 25, height: 25, speed: 4 + (score * 0.1) });
+            }
+
+            for (let i = 0; i < obstacles.length; i++) {
+                let obs = obstacles[i];
+                obs.x -= obs.speed; // Move yarn left
+
+                // Draw Yarn Emoji
+                ctx.font = "25px Arial";
+                ctx.fillText("🧶", obs.x, obs.y + 20);
+
+                // 3. Collision Detection (Did the kitty hit the yarn?)
+                if (kitty.x < obs.x + obs.width - 10 &&
+                    kitty.x + kitty.width - 10 > obs.x &&
+                    kitty.y < obs.y + obs.height - 10 &&
+                    kitty.height + kitty.y - 10 > obs.y) {
+                    
+                    isGameOver = true;
+                    gameOverScreen.style.display = 'flex';
+                    finalScoreEl.innerText = score;
+                }
+
+                // 4. Score Tracking (If yarn goes off screen)
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                    i--;
+                    score++;
+                }
+            }
+
+            // Draw the Score
+            ctx.fillStyle = "#502c46";
+            ctx.font = "bold 16px Arial";
+            ctx.fillText("Score: " + score, canvas.width - 80, 25);
+
+            // Draw Ground Line
+            ctx.beginPath();
+            ctx.moveTo(0, 140);
+            ctx.lineTo(canvas.width, 140);
+            ctx.strokeStyle = "#80287a";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Ask the browser to run this loop again for the next frame
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game when the page loads
+        resetGame();
     </script>
 
 </body>
