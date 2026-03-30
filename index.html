@@ -151,7 +151,22 @@
         </div>
 
     </div>
-
+        <div class="card">
+            <h2>Kitty Hurdles</h2>
+            <p style="font-size: 0.9rem; color: #888;">Tap the game or press Space to jump!</p>
+            
+            <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; background: #fafafa;">
+                
+                <canvas id="kittyGame" width="400" height="150" style="display: block; width: 100%; cursor: pointer;"></canvas>
+                
+                <div id="game-over-screen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; flex-direction: column; justify-content: center; align-items: center;">
+                    <h3 style="color: white; margin-bottom: 5px;">Oh no!</h3>
+                    <p style="margin-top: 0;">Score: <span id="final-score" style="font-weight: bold; color: #a8d5e2;">0</span></p>
+                    <button class="btn" onclick="resetGame()" style="background: white; color: var(--primary); padding: 5px 15px;">Play Again</button>
+                </div>
+         </div>
+     </div>
+    
     <script>
         // 1. FETCH THE AI ART
         const workerUrl = 'https://bearandraccoon.kevinmlynam.workers.dev/'; // Ensure this is your live URL
