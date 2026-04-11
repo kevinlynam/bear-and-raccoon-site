@@ -1,0 +1,25 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main # Change to 'master' if your main branch is called master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to existing Cloudflare Page
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'bear-and-raccoon' # 🚨 EXACT name of your Cloudflare Pages project
+          directory: '.' # Leave as '.' if index.html is in your main folder, otherwise put the folder name (e.g., 'public')
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
