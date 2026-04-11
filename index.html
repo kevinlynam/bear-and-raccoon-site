@@ -376,9 +376,11 @@
             <div class="game-wrapper">
                 <canvas id="kittyGame" class="game-canvas" width="400" height="150"></canvas>
                 
-                <div class="leaderboard-container">
-                    <h3 class="leaderboard-title">🏆 Top Scores</h3>
-                    <ul id="high-score-list" class="leaderboard-list"></ul>
+                <div id="leaderboard-area" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; cursor: pointer;">
+                    <h3 style="margin-top: 0; font-size: 1.2rem; color: var(--primary);">🏆 Top Scores</h3>
+                    <ul id="high-score-list" style="list-style: none; padding: 0; margin: 0; font-weight: bold; color: #5b8c85; pointer-events: none;">
+                        </ul>
+                    <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px; margin-bottom: 0;">(Tap anywhere here to jump!)</p>
                 </div>
             
                 <div id="start-screen" class="overlay-screen">
@@ -387,7 +389,7 @@
                 </div>
 
                 <div id="game-over-screen" class="overlay-screen hidden">
-                    <h3 class="overlay-title">Oh no!</h3>
+                    <h3 class="overlay-title">The stubby legs strike again!</h3>
                     <p class="overlay-text">Score: <span id="final-score" class="score-highlight">0</span></p>
                     <button class="btn btn-outline" id="btn-reset-game">Play Again</button>
                 </div>
@@ -607,6 +609,13 @@
             startScreen.addEventListener('touchstart', (e) => { e.preventDefault(); handleInput(); }, {passive: false});
             document.getElementById('btn-reset-game').addEventListener('click', resetGame);
             document.addEventListener('keydown', (e) => { if (e.code === 'Space') handleInput(); });
+            // Add jump controls to the leaderboard area
+            const leaderboardArea = document.getElementById('leaderboard-area');
+            leaderboardArea.addEventListener('mousedown', handleInput);
+            leaderboardArea.addEventListener('touchstart', (e) => { 
+                if (isGameStarted && !isGameOver) e.preventDefault(); // Prevents screen scrolling while actively playing
+                handleInput(); 
+            }, {passive: false});
 
             function gameLoop() {
                 if (isGameOver || !isGameStarted) return;
