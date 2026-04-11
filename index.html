@@ -222,6 +222,11 @@
             <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; background: #fafafa;">
                 
                 <canvas id="kittyGame" width="400" height="150" style="display: block; width: 100%; cursor: pointer;"></canvas>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+             <h3 style="margin-top: 0; font-size: 1.2rem; color: var(--primary);">🏆 Top Scores</h3>
+                 <ul id="high-score-list" style="list-style: none; padding: 0; margin: 0; font-weight: bold; color: #5b8c85;">
+                </ul>
+</div>
                 
                 <div id="start-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                     <h3 style="color: white; margin-bottom: 5px;">Ready to Play?</h3>
@@ -334,6 +339,35 @@
 
         // Added 'isGameStarted' to prevent autoplay
         let kitty, obstacles, score, gameLoopId, isGameOver, isGameStarted, framesUntilNextSpawn;
+        // BEAN JUMP LEADERBOARD LOGIC
+        let highScores = JSON.parse(localStorage.getItem('beanJumpScores')) || [];
+
+        function updateLeaderboard(newScore) {
+            if (newScore > 0) {
+                highScores.push(newScore);
+                // Sort highest to lowest and keep only the top 3
+                highScores.sort((a, b) => b - a);
+                highScores = highScores.slice(0, 3);
+                localStorage.setItem('beanJumpScores', JSON.stringify(highScores));
+            }
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            const listEl = document.getElementById('high-score-list');
+            listEl.innerHTML = '';
+            if (highScores.length === 0) {
+                listEl.innerHTML = '<li style="color: #888; font-weight: normal;">No high scores yet!</li>';
+            } else {
+                highScores.forEach((score, index) => {
+                    let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                    listEl.innerHTML += `<li style="padding: 4px 0;">${medal} ${score} pts</li>`;
+                });
+            }
+        }
+
+        // Render the board when the page loads
+        renderLeaderboard();
 
         // Draws the kitty sitting still before the game begins
         function initGame() {
@@ -472,6 +506,7 @@
                 isGameOver = true;
                 gameOverScreen.style.display = 'flex';
                 finalScoreEl.innerText = score;
+                updateLeaderboard(score); 
             }
         
             // 5. Score Tracking
