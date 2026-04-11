@@ -393,6 +393,26 @@
                 </div>
             </div>
         </div>
+        <div class="card">
+            <h2>Flappy Bean</h2>
+            <p style="font-size: 0.9rem; color: #888;">Tap or press Up Arrow to fly!</p>
+            
+            <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; background: #e0f7fa;">
+                
+                <canvas id="flappyGame" width="400" height="300" style="display: block; width: 100%; cursor: pointer;"></canvas>
+                
+                <div id="fb-start-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h3 style="color: white; margin-bottom: 5px;">Flappy Bean</h3>
+                    <p style="margin-top: 0;">Tap here to fly!</p>
+                </div>
+
+                <div id="fb-game-over-screen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; flex-direction: column; justify-content: center; align-items: center;">
+                    <h3 style="color: white; margin-bottom: 5px;">Splat!</h3>
+                    <p style="margin-top: 0;">Score: <span id="fb-final-score" style="font-weight: bold; color: #a8d5e2;">0</span></p>
+                    <button class="btn" onclick="resetFlappy()" style="background: white; color: var(--primary); padding: 5px 15px;">Fly Again</button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -743,6 +763,160 @@
                 }).onfinish = () => ripple.remove();
             }, 700); 
         });
+
+                // 7. FLAPPY BEAN LOGIC
+        const fbCanvas = document.getElementById('flappyGame');
+        const fbCtx = fbCanvas.getContext('2d');
+        const fbStartScreen = document.getElementById('fb-start-screen');
+        const fbGameOverScreen = document.getElementById('fb-game-over-screen');
+        const fbFinalScoreEl = document.getElementById('fb-final-score');
+
+        let fbBean, fbPipes, fbScore, fbFrameCounter, fbLoopId, fbIsGameOver, fbIsGameStarted;
+
+        function initFlappy() {
+            fbBean = { x: 50, y: 150, width: 25, height: 25, dy: 0, gravity: 0.4, lift: -6 };
+            fbIsGameStarted = false;
+            fbIsGameOver = false;
+            
+            fbCtx.clearRect(0, 0, fbCanvas.width, fbCanvas.height);
+            drawFbBean();
+            
+            fbStartScreen.style.display = 'flex';
+            fbGameOverScreen.style.display = 'none';
+        }
+
+        function resetFlappy() {
+            fbBean = { x: 50, y: 150, width: 25, height: 25, dy: 0, gravity: 0.4, lift: -6 };
+            fbPipes = [];
+            fbScore = 0;
+            fbFrameCounter = 0;
+            fbIsGameOver = false;
+            fbIsGameStarted = true;
+            
+            fbStartScreen.style.display = 'none';
+            fbGameOverScreen.style.display = 'none';
+            
+            cancelAnimationFrame(fbLoopId);
+            flappyLoop();
+        }
+
+        function flap() {
+            if (!fbIsGameStarted) {
+                resetFlappy();
+            } else if (fbIsGameOver) {
+                resetFlappy();
+            } else {
+                fbBean.dy = fbBean.lift;
+            }
+        }
+
+        // Event Listeners for Flappy Bean
+        fbCanvas.addEventListener('mousedown', flap);
+        fbCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); flap(); }, {passive: false});
+        fbStartScreen.addEventListener('mousedown', flap);
+        fbStartScreen.addEventListener('touchstart', (e) => { e.preventDefault(); flap(); }, {passive: false});
+        document.addEventListener('keydown', (e) => { 
+            if (e.code === 'ArrowUp') {
+                e.preventDefault(); // Stop page scrolling
+                flap(); 
+            }
+        });
+
+        function drawFbBean() {
+            fbCtx.save(); 
+            fbCtx.translate(fbBean.x + 15, fbBean.y + 20); 
+            fbCtx.scale(-1, 1); // Flip cat to face right
+            // Tilt the cat based on velocity
+            let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (fbBean.dy * 0.1)));
+            fbCtx.rotate(-rotation); 
+            fbCtx.font = "26px Arial";
+            fbCtx.fillText("🐈", -13, 0); 
+            fbCtx.restore(); 
+        }
+
+        function flappyLoop() {
+            if (fbIsGameOver || !fbIsGameStarted) return;
+            
+            fbCtx.clearRect(0, 0, fbCanvas.width, fbCanvas.height);
+            fbFrameCounter++;
+
+            // Bean Physics
+            fbBean.dy += fbBean.gravity;
+            fbBean.y += fbBean.dy;
+
+            // Ceiling / Floor Collision
+            if (fbBean.y + fbBean.height > fbCanvas.height || fbBean.y < 0) {
+                triggerFbGameOver();
+            }
+
+            // Pipe Logic
+            if (fbFrameCounter % 100 === 0) { // Every 100 frames, generate pipe
+                let gap = 110; // Space between pipes
+                let pipeWidth = 40;
+                let minHeight = 40;
+                let maxHeight = fbCanvas.height - gap - minHeight;
+                let topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
+                
+                fbPipes.push({
+                    x: fbCanvas.width,
+                    topHeight: topHeight,
+                    bottomY: topHeight + gap,
+                    width: pipeWidth,
+                    passed: false
+                });
+            }
+
+            for (let i = 0; i < fbPipes.length; i++) {
+                let p = fbPipes[i];
+                p.x -= 2.5; // Pipe speed
+
+                // Draw Pipes
+                fbCtx.fillStyle = "#5b8c85";
+                fbCtx.fillRect(p.x, 0, p.width, p.topHeight); // Top pipe
+                fbCtx.fillRect(p.x, p.bottomY, p.width, fbCanvas.height - p.bottomY); // Bottom pipe
+                
+                // Add a small cap to the pipes for style
+                fbCtx.fillStyle = "#46726b";
+                fbCtx.fillRect(p.x - 2, p.topHeight - 15, p.width + 4, 15);
+                fbCtx.fillRect(p.x - 2, p.bottomY, p.width + 4, 15);
+
+                // Pipe Collision Detection
+                if (fbBean.x < p.x + p.width && fbBean.x + fbBean.width > p.x) {
+                    if (fbBean.y < p.topHeight || fbBean.y + fbBean.height > p.bottomY) {
+                        triggerFbGameOver();
+                    }
+                }
+
+                // Score Tracking
+                if (p.x + p.width < fbBean.x && !p.passed) {
+                    fbScore++;
+                    p.passed = true;
+                }
+
+                // Remove off-screen pipes
+                if (p.x + p.width < 0) {
+                    fbPipes.splice(i, 1);
+                    i--;
+                }
+            }
+
+            drawFbBean();
+
+            // Draw Score
+            fbCtx.fillStyle = "#502c46";
+            fbCtx.font = "bold 24px Arial";
+            fbCtx.fillText(fbScore, fbCanvas.width / 2 - 10, 35);
+
+            fbLoopId = requestAnimationFrame(flappyLoop);
+        }
+
+        function triggerFbGameOver() {
+            fbIsGameOver = true;
+            fbGameOverScreen.style.display = 'flex';
+            fbFinalScoreEl.innerText = fbScore;
+        }
+
+        initFlappy();
     </script>
 </body>
 </html>
