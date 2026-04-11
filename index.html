@@ -880,12 +880,12 @@
                 p.x -= 2.5; // Pipe speed
 
                 // Draw Pipes
-                fbCtx.fillStyle = "#5b8c85";
+                fbCtx.fillStyle = "#8c7c5b";
                 fbCtx.fillRect(p.x, 0, p.width, p.topHeight); // Top pipe
                 fbCtx.fillRect(p.x, p.bottomY, p.width, fbCanvas.height - p.bottomY); // Bottom pipe
                 
                 // Add a small cap to the pipes for style
-                fbCtx.fillStyle = "#46726b";
+                fbCtx.fillStyle = "#726446";
                 fbCtx.fillRect(p.x - 2, p.topHeight - 15, p.width + 4, 15);
                 fbCtx.fillRect(p.x - 2, p.bottomY, p.width + 4, 15);
 
