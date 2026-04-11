@@ -399,8 +399,12 @@
             <h2>Flappy Bean</h2>
             <p style="font-size: 0.9rem; color: #888;">Tap or press Up Arrow to fly!</p>
             
-            <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; background: #e0f7fa;">
-                
+            <<div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; background: #e0f7fa;">
+    
+                <div style="position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255, 255, 255, 0.7); padding: 4px 8px; border-radius: 8px; font-weight: bold; color: var(--primary); font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    👑 High: <span id="fb-global-high">--</span>
+                </div>
+
                 <canvas id="flappyGame" width="400" height="300" style="display: block; width: 100%; cursor: pointer;"></canvas>
                 
                 <div id="fb-start-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -773,7 +777,9 @@
             }, 700); 
         });
 
-                // 7. FLAPPY BEAN LOGIC
+               // ==========================================
+        // 7. FLAPPY BEAN LOGIC
+        // ==========================================
         const fbCanvas = document.getElementById('flappyGame');
         const fbCtx = fbCanvas.getContext('2d');
         const fbStartScreen = document.getElementById('fb-start-screen');
@@ -781,6 +787,24 @@
         const fbFinalScoreEl = document.getElementById('fb-final-score');
 
         let fbBean, fbPipes, fbScore, fbFrameCounter, fbLoopId, fbIsGameOver, fbIsGameStarted;
+
+        // --- NEW: HIGH SCORE API LOGIC ---
+        let fbGlobalHighScore = 0;
+        const workerApiUrl = 'https://bearandraccoon.kevinmlynam.workers.dev/flappy-score';
+        
+        async function fetchFlappyHighScore() {
+            try {
+                const response = await fetch(workerApiUrl);
+                fbGlobalHighScore = parseInt(await response.text()) || 0;
+                document.getElementById('fb-global-high').innerText = fbGlobalHighScore;
+            } catch (error) {
+                console.error("Could not load high score");
+            }
+        }
+        
+        // Fetch the score as soon as the page loads!
+        fetchFlappyHighScore();
+        // ---------------------------------
 
         function initFlappy() {
             fbBean = { x: 50, y: 150, width: 25, height: 25, dy: 0, gravity: 0.25, lift: -5 };
@@ -893,9 +917,9 @@
                 let hitMargin = 5; // Shaves 5 pixels off all sides of the cat's hitbox
         
                 if (fbBean.x + hitMargin < p.x + p.width && fbBean.x + fbBean.width - hitMargin > p.x) {
-                if (fbBean.y + hitMargin < p.topHeight || fbBean.y + fbBean.height - hitMargin > p.bottomY) {
-                triggerFbGameOver();
-                 }
+                    if (fbBean.y + hitMargin < p.topHeight || fbBean.y + fbBean.height - hitMargin > p.bottomY) {
+                        triggerFbGameOver();
+                    }
                 }
 
                 // Score Tracking
@@ -921,11 +945,26 @@
             fbLoopId = requestAnimationFrame(flappyLoop);
         }
 
+        // --- NEW: UPDATED GAME OVER LOGIC ---
         function triggerFbGameOver() {
             fbIsGameOver = true;
             fbGameOverScreen.style.display = 'flex';
             fbFinalScoreEl.innerText = fbScore;
+
+            // Check if they beat the global high score!
+            if (fbScore > fbGlobalHighScore) {
+                fbGlobalHighScore = fbScore;
+                document.getElementById('fb-global-high').innerText = fbGlobalHighScore; // Update UI instantly
+                
+                // Quietly send the new score to the Cloudflare Worker in the background
+                fetch(workerApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ score: fbScore })
+                }).catch(err => console.error("Failed to save high score"));
+            }
         }
+        // -------------------------------------
 
         initFlappy();
     </script>
