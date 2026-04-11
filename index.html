@@ -774,7 +774,7 @@
         let fbBean, fbPipes, fbScore, fbFrameCounter, fbLoopId, fbIsGameOver, fbIsGameStarted;
 
         function initFlappy() {
-            fbBean = { x: 50, y: 150, width: 25, height: 25, dy: 0, gravity: 0.4, lift: -6 };
+            fbBean = { x: 50, y: 150, width: 25, height: 25, dy: 0, gravity: 0.25, lift: -5 };
             fbIsGameStarted = false;
             fbIsGameOver = false;
             
@@ -786,7 +786,7 @@
         }
 
         function resetFlappy() {
-            fbBean = { x: 50, y: 150, width: 25, height: 25, dy: 0, gravity: 0.4, lift: -6 };
+            fbBean = { x: 50, y: 150, width: 25, height: 25, dy: 0, gravity: 0.25, lift: -5 };
             fbPipes = [];
             fbScore = 0;
             fbFrameCounter = 0;
@@ -880,11 +880,13 @@
                 fbCtx.fillRect(p.x - 2, p.topHeight - 15, p.width + 4, 15);
                 fbCtx.fillRect(p.x - 2, p.bottomY, p.width + 4, 15);
 
-                // Pipe Collision Detection
-                if (fbBean.x < p.x + p.width && fbBean.x + fbBean.width > p.x) {
-                    if (fbBean.y < p.topHeight || fbBean.y + fbBean.height > p.bottomY) {
-                        triggerFbGameOver();
-                    }
+                // Pipe Collision Detection (Updated with a forgiving hitbox)
+                let hitMargin = 5; // Shaves 5 pixels off all sides of the cat's hitbox
+        
+                if (fbBean.x + hitMargin < p.x + p.width && fbBean.x + fbBean.width - hitMargin > p.x) {
+                if (fbBean.y + hitMargin < p.topHeight || fbBean.y + fbBean.height - hitMargin > p.bottomY) {
+                triggerFbGameOver();
+                 }
                 }
 
                 // Score Tracking
