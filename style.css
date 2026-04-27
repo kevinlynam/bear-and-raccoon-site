@@ -1,0 +1,315 @@
+        /* =========================================
+           GLOBAL VARIABLES & BASE STYLES
+           ========================================= */
+        :root {
+            --primary: #502c46;
+            --accent: #423ce7;
+            --bg: #5c0456;
+            --soft-blue: #a8d5e2;
+            --sage-green: #5b8c85;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        h1, h2 { 
+            margin-top: 0; 
+            color: var(--primary); 
+        }
+
+        /* =========================================
+           CARDS & LAYOUT
+           ========================================= */
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .card-breathe {
+            background-color: #f0f8ff; 
+            border: 2px solid #d0e8f2;
+        }
+
+        .divider {
+            border: 0; 
+            border-top: 1px solid #d0e8f2; 
+            margin: 25px 0;
+        }
+
+        /* =========================================
+           BUTTONS
+           ========================================= */
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+
+        .btn:hover { 
+            background-color: #1a252f; 
+            transform: translateY(-2px); 
+        }
+
+        .btn-sage {
+            background-color: var(--sage-green); 
+            margin-bottom: 15px;
+        }
+
+        .btn-outline {
+            background: white; 
+            color: var(--primary); 
+            padding: 5px 15px;
+        }
+
+        /* =========================================
+           ADVENTURE SECTION
+           ========================================= */
+        .daily-img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            background: #f0f0f0;
+            min-height: 300px;
+            object-fit: cover;
+        }
+
+        .loading-text { 
+            color: #888; 
+            font-style: italic; 
+        }
+
+        /* =========================================
+           DASHBOARD ELEMENTS
+           ========================================= */
+        .love-note {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--accent);
+            margin: 15px 0;
+        }
+
+        .dates-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 300px;
+        }
+
+        .dates-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .countdown-box {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            padding: 10px;
+            background: #fadbd8;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* =========================================
+           BREATHING & HUGS
+           ========================================= */
+        .breathe-container {
+            display: flex; 
+            justify-content: center; 
+            margin: 30px 0;
+        }
+
+        .breathe-circle {
+            width: 75px;
+            height: 75px;
+            background-color: var(--soft-blue);
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: breathe 10s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.5; }
+            40% { transform: scale(1.8); opacity: 1; }
+            50% { transform: scale(1.8); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        .breathe-text {
+            color: var(--sage-green); 
+            font-size: 0.9rem;
+        }
+
+        .hug-message-box {
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            color: #2c3e50; 
+            min-height: 50px;
+        }
+
+        /* =========================================
+           BEAN JUMP GAME
+           ========================================= */
+        .game-subtitle {
+            font-size: 0.9rem; 
+            color: #888;
+        }
+
+        .game-wrapper {
+            position: relative; 
+            width: 100%; 
+            max-width: 400px; 
+            margin: 0 auto; 
+            border: 2px solid var(--primary); 
+            border-radius: 10px; 
+            overflow: hidden; 
+            background: #fafafa;
+        }
+
+        .game-canvas {
+            display: block; 
+            width: 100%; 
+            cursor: pointer;
+        }
+
+        .leaderboard-container {
+            margin-top: 15px; 
+            padding-top: 15px; 
+            border-top: 1px solid #eee;
+        }
+
+        .leaderboard-title {
+            margin-top: 0; 
+            font-size: 1.2rem; 
+            color: var(--primary);
+        }
+
+        .leaderboard-list {
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            font-weight: bold; 
+            color: var(--sage-green);
+        }
+
+        .overlay-screen {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(80, 44, 70, 0.85); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .overlay-title {
+            color: white; 
+            margin-bottom: 5px;
+        }
+
+        .overlay-text {
+            margin-top: 0;
+        }
+
+        .score-highlight {
+            font-weight: bold; 
+            color: var(--soft-blue);
+        }
+
+        .hidden { display: none !important; }
+
+        /* =========================================
+           MEDITATION STREAM
+           ========================================= */
+        #stream-wrapper {
+            position: fixed;
+            top: 0;
+            left: -150px;
+            width: 150px;
+            height: 100vh;
+            z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+        }
+
+        #stream-wrapper.open {
+            transform: translateX(150px);
+        }
+
+        #meditation-stream {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(168, 213, 226, 0.9), rgba(91, 140, 133, 0.95));
+            border-right: 2px solid rgba(168, 213, 226, 0.6);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        #stream-toggle {
+            position: absolute;
+            right: -45px;
+            top: 20%;
+            width: 45px;
+            height: 50px;
+            background: var(--sage-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 24px;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+
+        .leaf {
+            position: absolute;
+            font-size: 28px;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .water-ripple {
+            position: absolute;
+            color: rgba(30, 70, 65, 0.2);
+            font-size: 24px;
+            font-weight: bold;
+            user-select: none;
+            pointer-events: none;
+        }
