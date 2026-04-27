@@ -68,7 +68,14 @@
                 <h2>Bean Jump</h2>
                 <p class="game-subtitle">Tap the game or press Space to jump!</p>
                 
-                <div class="game-wrapper">
+             <div class="game-wrapper">
+                
+                <div style="position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255, 255, 255, 0.7); padding: 4px 8px; border-radius: 8px; font-weight: bold; color: var(--primary); font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    👑 Global High: <span id="bean-global-high">--</span>
+                </div>
+
+                <canvas id="kittyGame" class="game-canvas" width="400" height="150"></canvas>
+
                     <canvas id="kittyGame" class="game-canvas" width="400" height="150"></canvas>
                     
                     <div id="leaderboard-area" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; cursor: pointer;">

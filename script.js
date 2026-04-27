@@ -127,6 +127,22 @@ document.addEventListener('DOMContentLoaded', () => {
             let kitty, obstacles, score, gameLoopId, isGameOver, isGameStarted, framesUntilNextSpawn;
             let highScores = JSON.parse(localStorage.getItem('beanJumpScores')) || [];
 
+            // --- NEW: BEAN JUMP GLOBAL API LOGIC ---
+            let beanGlobalHighScore = 0;
+            const beanApiUrl = '/api/gamescore?game=bean';
+
+            async function fetchBeanHighScore() {
+                try {
+                    const response = await fetch(beanApiUrl);
+                    beanGlobalHighScore = parseInt(await response.text()) || 0;
+                    document.getElementById('bean-global-high').innerText = beanGlobalHighScore;
+                } catch (error) {
+                    console.error("Could not load Bean Jump high score");
+                }
+            }
+            
+            fetchBeanHighScore(); // Fetch immediately on load
+            
             function updateLeaderboard(newScore) {
                 if (newScore > 0) {
                     highScores.push(newScore);
@@ -283,8 +299,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         gameOverScreen.classList.remove('hidden');
                         finalScoreEl.innerText = score;
                         updateLeaderboard(score); 
+                        
+                        // --- NEW: CHECK & SAVE GLOBAL HIGH SCORE ---
+                        if (score > beanGlobalHighScore) {
+                            beanGlobalHighScore = score;
+                            document.getElementById('bean-global-high').innerText = beanGlobalHighScore; 
+                            
+                            // Send it to the worker quietly
+                            fetch(beanApiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ score: score })
+                            }).catch(err => console.error("Failed to save high score"));
+                        }
                     }
-                
                     if (obs.x + obs.width < 0) {
                         obstacles.splice(i, 1);
                         i--;
