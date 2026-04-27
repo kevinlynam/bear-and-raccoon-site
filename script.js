@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // ==========================================
             // 1. API FETCH & DOWNLOAD LOGIC
             // ==========================================
-            const workerUrl = 'https://bearandraccoon.kevinmlynam.workers.dev/'; 
+            const workerUrl = '/api/adventure'; 
             
             fetch(workerUrl)
                 .then(response => response.json())
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- NEW: HIGH SCORE API LOGIC ---
         let fbGlobalHighScore = 0;
-        const workerApiUrl = 'https://bearandraccoon.kevinmlynam.workers.dev/flappy-score';
+        const workerApiUrl = '/api/gamescore';
         
         async function fetchFlappyHighScore() {
             try {
