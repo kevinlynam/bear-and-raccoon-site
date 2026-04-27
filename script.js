@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "You are my favorite person",
                 "I am a peace when I'm with you",
                 "I will always do my best to support you",
+                "You are my favorite",
                 "I love my life with you"
             ];
             
