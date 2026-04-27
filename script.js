@@ -125,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const finalScoreEl = document.getElementById('final-score');
 
             let kitty, obstacles, score, gameLoopId, isGameOver, isGameStarted, framesUntilNextSpawn;
-            let highScores = JSON.parse(localStorage.getItem('beanJumpScores')) || [];
 
             // --- NEW: BEAN JUMP GLOBAL API LOGIC ---
             let beanGlobalHighScore = 0;
@@ -143,29 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             fetchBeanHighScore(); // Fetch immediately on load
             
-            function updateLeaderboard(newScore) {
-                if (newScore > 0) {
-                    highScores.push(newScore);
-                    highScores.sort((a, b) => b - a);
-                    highScores = highScores.slice(0, 3);
-                    localStorage.setItem('beanJumpScores', JSON.stringify(highScores));
-                }
-                renderLeaderboard();
-            }
-
-            function renderLeaderboard() {
-                const listEl = document.getElementById('high-score-list');
-                listEl.innerHTML = '';
-                if (highScores.length === 0) {
-                    listEl.innerHTML = '<li style="color: #888; font-weight: normal;">No high scores yet!</li>';
-                } else {
-                    highScores.forEach((score, index) => {
-                        let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
-                        listEl.innerHTML += `<li style="padding: 4px 0;">${medal} ${score} pts</li>`;
-                    });
-                }
-            }
-
+     
             function initGame() {
                 kitty = { x: 50, y: 110, width: 30, height: 30, dy: 0, gravity: 0.5, jumpPower: -9, isJumping: false };
                 isGameStarted = false;
@@ -223,14 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
             startScreen.addEventListener('mousedown', handleInput);
             startScreen.addEventListener('touchstart', (e) => { e.preventDefault(); handleInput(); }, {passive: false});
             document.getElementById('btn-reset-game').addEventListener('click', resetGame);
-            document.addEventListener('keydown', (e) => { if (e.code === 'Space') handleInput(); });
-            // Add jump controls to the leaderboard area
-            const leaderboardArea = document.getElementById('leaderboard-area');
-            leaderboardArea.addEventListener('mousedown', handleInput);
-            leaderboardArea.addEventListener('touchstart', (e) => { 
-                if (isGameStarted && !isGameOver) e.preventDefault(); // Prevents screen scrolling while actively playing
-                handleInput(); 
-            }, {passive: false});
+            document.addEventListener('keydown', (e) => { 
+                if (e.code === 'Space') {
+                    if (isGameStarted && !isGameOver) e.preventDefault(); // Prevents screen scrolling
+                    handleInput(); 
+                }
+            });
 
             function gameLoop() {
                 if (isGameOver || !isGameStarted) return;
@@ -298,7 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         isGameOver = true;
                         gameOverScreen.classList.remove('hidden');
                         finalScoreEl.innerText = score;
-                        updateLeaderboard(score); 
                         
                         // --- NEW: CHECK & SAVE GLOBAL HIGH SCORE ---
                         if (score > beanGlobalHighScore) {
@@ -334,7 +308,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 gameLoopId = requestAnimationFrame(gameLoop);
             }
 
-            renderLeaderboard();
             initGame();
 
             // ==========================================
@@ -398,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     fill: 'forwards'
                 }).onfinish = () => ripple.remove();
             }, 700); 
-        });
+        
 
                // ==========================================
         // 7. FLAPPY BEAN LOGIC
@@ -455,6 +428,8 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelAnimationFrame(fbLoopId);
             flappyLoop();
         }
+
+        window.resetFlappy = resetFlappy;
 
         function flap() {
             if (!fbIsGameStarted) {
@@ -590,3 +565,4 @@ document.addEventListener('DOMContentLoaded', () => {
         // -------------------------------------
 
         initFlappy();
+    });
