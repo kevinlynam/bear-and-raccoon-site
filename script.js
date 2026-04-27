@@ -1,6 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
             
             // ==========================================
+            // 0. NAVIGATION TABS LOGIC
+            // ==========================================
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const viewSections = document.querySelectorAll('.view-section');
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active state from all buttons and views
+                    navButtons.forEach(b => b.classList.remove('active'));
+                    viewSections.forEach(v => v.classList.remove('active-view'));
+                    
+                    // Add active state to clicked button and its target view
+                    btn.classList.add('active');
+                    const targetId = btn.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active-view');
+                });
+            });
+
+            // ==========================================
             // 1. API FETCH & DOWNLOAD LOGIC
             // ==========================================
             const workerUrl = '/api/adventure'; 
@@ -47,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 "You are my favorite person",
                 "I am a peace when I'm with you",
                 "I will always do my best to support you",
-                "You are my favorite",
                 "I love my life with you"
             ];
             

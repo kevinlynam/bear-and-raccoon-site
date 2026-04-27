@@ -13,93 +13,106 @@
         <div id="stream-toggle" title="Open Meditation Stream">🌊</div>
     </div>
 
+    <nav class="nav-bar">
+        <button class="nav-btn active" data-target="view-art">🎨 Art & Us</button>
+        <button class="nav-btn" data-target="view-calm">🌿 Calm</button>
+        <button class="nav-btn" data-target="view-games">🎮 Games</button>
+    </nav>
+
     <div class="container">
         
-        <div class="card">
-            <h1>Our Daily Adventure</h1>
-            <img id="daily-image" class="daily-img" src="" alt="Painting today's adventure...">
-            <p id="daily-message" class="loading-text">Waking up the Bear and Raccoon... (Takes ~15 secs)</p>
-            <button class="btn" id="btn-download">Download Today's Adventure</button>
-        </div>
-
-        <div class="card">
-            <h2>Just a reminder...</h2>
-            <p class="love-note" id="daily-love-note">"Loading my love for you..."</p>
-        </div>
-        
-        <div class="card card-breathe">
-            <h2>Take a Breath</h2>
-            <div class="breathe-container">
-                <div class="breathe-circle"></div>
+        <div id="view-art" class="view-section active-view">
+            <div class="card">
+                <h1>Our Daily Adventure</h1>
+                <img id="daily-image" class="daily-img" src="" alt="Painting today's adventure...">
+                <p id="daily-message" class="loading-text">Waking up the Bear and Raccoon... (Takes ~15 secs)</p>
+                <button class="btn" id="btn-download">Download Today's Adventure</button>
             </div>
-            <p class="breathe-text">Follow the circle. Inhale as it grows, exhale as it shrinks.</p>
 
-            <hr class="divider">
-
-            <h2>Need a little extra love?</h2>
-            <button class="btn btn-sage" id="btn-hug">Send an Emergency Hug</button>
-            <p id="hug-message" class="hug-message-box"></p>
-        </div>
-        
-        <div class="card">
-            <h2>Our Timeline</h2>
-            <ul class="dates-list">
-                <li><span>First Date</span> <span>April 09, 2025</span></li>
-                <li><span>First 'I Love You's</span> <span>July 2025</span></li>
-                <li><span>Moved In</span> <span>SOON!</span></li>
-            </ul>
-            
-            <h2 style="margin-top: 25px;">Countdown to Hadestown</h2>
-            <div class="countdown-box" id="countdown">Calculating...</div>
-        </div>
-
-        <div class="card">
-            <h2>Bean Jump</h2>
-            <p class="game-subtitle">Tap the game or press Space to jump!</p>
-            
-            <div class="game-wrapper">
-                <canvas id="kittyGame" class="game-canvas" width="400" height="150"></canvas>
+            <div class="card">
+                <h2>Our Timeline</h2>
+                <ul class="dates-list">
+                    <li><span>First Date</span> <span>April 09, 2025</span></li>
+                    <li><span>First 'I Love You's</span> <span>July 2025</span></li>
+                    <li><span>Moved In</span> <span>SOON!</span></li>
+                </ul>
                 
-                <div id="leaderboard-area" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; cursor: pointer;">
-                    <h3 style="margin-top: 0; font-size: 1.2rem; color: var(--primary);">🏆 Top Scores</h3>
-                    <ul id="high-score-list" style="list-style: none; padding: 0; margin: 0; font-weight: bold; color: #5b8c85; pointer-events: none;">
+                <h2 style="margin-top: 25px;">Countdown to Hadestown</h2>
+                <div class="countdown-box" id="countdown">Calculating...</div>
+            </div>
+        </div>
+
+        <div id="view-calm" class="view-section">
+            <div class="card">
+                <h2>Just a reminder...</h2>
+                <p class="love-note" id="daily-love-note">"Loading my love for you..."</p>
+            </div>
+            
+            <div class="card card-breathe">
+                <h2>Take a Breath</h2>
+                <div class="breathe-container">
+                    <div class="breathe-circle"></div>
+                </div>
+                <p class="breathe-text">Follow the circle. Inhale as it grows, exhale as it shrinks.</p>
+
+                <hr class="divider">
+
+                <h2>Need a little extra love?</h2>
+                <button class="btn btn-sage" id="btn-hug">Send an Emergency Hug</button>
+                <p id="hug-message" class="hug-message-box"></p>
+            </div>
+        </div>
+
+        <div id="view-games" class="view-section">
+            <div class="card">
+                <h2>Bean Jump</h2>
+                <p class="game-subtitle">Tap the game or press Space to jump!</p>
+                
+                <div class="game-wrapper">
+                    <canvas id="kittyGame" class="game-canvas" width="400" height="150"></canvas>
+                    
+                    <div id="leaderboard-area" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; cursor: pointer;">
+                        <h3 style="margin-top: 0; font-size: 1.2rem; color: var(--primary);">🏆 Top Scores</h3>
+                        <ul id="high-score-list" style="list-style: none; padding: 0; margin: 0; font-weight: bold; color: #5b8c85; pointer-events: none;">
                         </ul>
-                    <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px; margin-bottom: 0;">(Tap anywhere here to jump!)</p>
-                </div>
-            
-                <div id="start-screen" class="overlay-screen">
-                    <h3 class="overlay-title">Ready to Play?</h3>
-                    <p class="overlay-text">Tap here or press Space!</p>
-                </div>
+                        <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px; margin-bottom: 0;">(Tap anywhere here to jump!)</p>
+                    </div>
+                
+                    <div id="start-screen" class="overlay-screen">
+                        <h3 class="overlay-title">Ready to Play?</h3>
+                        <p class="overlay-text">Tap here or press Space!</p>
+                    </div>
 
-                <div id="game-over-screen" class="overlay-screen hidden">
-                    <h3 class="overlay-title">The stubby legs strike again!</h3>
-                    <p class="overlay-text">Score: <span id="final-score" class="score-highlight">0</span></p>
-                    <button class="btn btn-outline" id="btn-reset-game">Play Again</button>
+                    <div id="game-over-screen" class="overlay-screen hidden">
+                        <h3 class="overlay-title">The stubby legs strike again!</h3>
+                        <p class="overlay-text">Score: <span id="final-score" class="score-highlight">0</span></p>
+                        <button class="btn btn-outline" id="btn-reset-game">Play Again</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card">
-            <h2>Flappy Bean</h2>
-            <p style="font-size: 0.9rem; color: #888;">Tap or press Up Arrow to fly!</p>
-            
-            <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; background: #e0f7fa;">
-    
-                <div style="position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255, 255, 255, 0.7); padding: 4px 8px; border-radius: 8px; font-weight: bold; color: var(--primary); font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    👑 High: <span id="fb-global-high">--</span>
-                </div>
 
-                <canvas id="flappyGame" width="400" height="300" style="display: block; width: 100%; cursor: pointer;"></canvas>
+            <div class="card">
+                <h2>Flappy Bean</h2>
+                <p style="font-size: 0.9rem; color: #888;">Tap or press Up Arrow to fly!</p>
                 
-                <div id="fb-start-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                    <h3 style="color: white; margin-bottom: 5px;">Flappy Bean</h3>
-                    <p style="margin-top: 0;">Tap here to fly!</p>
-                </div>
+                <div style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; background: #e0f7fa;">
+        
+                    <div style="position: absolute; top: 10px; left: 10px; z-index: 10; background: rgba(255, 255, 255, 0.7); padding: 4px 8px; border-radius: 8px; font-weight: bold; color: var(--primary); font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                        👑 High: <span id="fb-global-high">--</span>
+                    </div>
 
-                <div id="fb-game-over-screen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; flex-direction: column; justify-content: center; align-items: center;">
-                    <h3 style="color: white; margin-bottom: 5px;">Mufasa'd!</h3>
-                    <p style="margin-top: 0;">Score: <span id="fb-final-score" style="font-weight: bold; color: #a8d5e2;">0</span></p>
-                    <button class="btn" onclick="resetFlappy()" style="background: white; color: var(--primary); padding: 5px 15px;">Fly Again</button>
+                    <canvas id="flappyGame" width="400" height="300" style="display: block; width: 100%; cursor: pointer;"></canvas>
+                    
+                    <div id="fb-start-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <h3 style="color: white; margin-bottom: 5px;">Flappy Bean</h3>
+                        <p style="margin-top: 0;">Tap here to fly!</p>
+                    </div>
+
+                    <div id="fb-game-over-screen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(80, 44, 70, 0.85); color: white; flex-direction: column; justify-content: center; align-items: center;">
+                        <h3 style="color: white; margin-bottom: 5px;">Mufasa'd!</h3>
+                        <p style="margin-top: 0;">Score: <span id="fb-final-score" style="font-weight: bold; color: #a8d5e2;">0</span></p>
+                        <button class="btn" onclick="resetFlappy()" style="background: white; color: var(--primary); padding: 5px 15px;">Fly Again</button>
+                    </div>
                 </div>
             </div>
         </div>
