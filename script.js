@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
      
             function initGame() {
-                kitty = { x: 50, y: 110, width: 30, height: 30, dy: 0, gravity: 0.5, jumpPower: -9, isJumping: false };
+                kitty = { x: 50, y: 320, width: 30, height: 30, dy: 0, gravity: 0.5, jumpPower: -9, isJumping: false };
                 isGameStarted = false;
                 isGameOver = false;
                 
@@ -158,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.restore(); 
 
                 ctx.beginPath();
-                ctx.moveTo(0, 140);
-                ctx.lineTo(canvas.width, 140);
+                ctx.moveTo(0, 350);
+                ctx.lineTo(canvas.width, 350);
                 ctx.strokeStyle = "#80287a";
                 ctx.lineWidth = 2;
                 ctx.stroke();
@@ -215,8 +215,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 kitty.dy += kitty.gravity;
                 kitty.y += kitty.dy;
 
-                if (kitty.y > 110) {
-                    kitty.y = 110;
+                if (kitty.y > 320) {
+                    kitty.y = 320;
                     kitty.dy = 0;
                     kitty.isJumping = false;
                 }
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                     obstacles.push({ 
                         x: canvas.width, 
-                        y: isDouble ? 140 - (baseSize * 2) : 140 - baseSize, 
+                        y: isDouble ? 350 - (baseSize * 2) : 350 - baseSize, 
                         width: baseSize, 
                         height: isDouble ? baseSize * 2 : baseSize, 
                         speed: baseSpeed + randomSpeedVariance,
@@ -299,8 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.fillText("Score: " + score, canvas.width - 80, 25);
 
                 ctx.beginPath();
-                ctx.moveTo(0, 140);
-                ctx.lineTo(canvas.width, 140);
+                ctx.moveTo(0, 350);
+                ctx.lineTo(canvas.width, 350);
                 ctx.strokeStyle = "#80287a";
                 ctx.lineWidth = 2;
                 ctx.stroke();
