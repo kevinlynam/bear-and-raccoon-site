@@ -1,5 +1,17 @@
-export async function onRequest(context) {
-    const { env } = context;
+ export async function onRequest(context) {
+    const { env, request } = context;
+
+    // 1. DEFINE CORS HEADERS (This was missing!)
+    const corsHeaders = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+    };
+
+    // Handle preflight requests
+    if (request.method === "OPTIONS") {
+        return new Response(null, { headers: corsHeaders });
+    }
 
     // Get the current date specifically in Mountain Time
     const mtDateString = new Date().toLocaleString("en-US", {
@@ -15,7 +27,7 @@ export async function onRequest(context) {
     const cachedData = await env.DAILY_STORE.get(today);
     if (cachedData) {
         return new Response(cachedData, {
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', ...corsHeaders }
         });
     }
 
@@ -202,11 +214,11 @@ export async function onRequest(context) {
             'Authorization': `Bearer ${env.OPENAI_API_KEY}`
           },
           body: JSON.stringify({
-            model: "gpt-image",
+            model: "dall-e-3", // I am so sorry for leading you astray here earlier!
             prompt: aiPrompt,
             n: 1,
-            size: "1024x1024"
-            // response_format line removed!
+            size: "1024x1024",
+            response_format: "b64_json" // Safe to add back for DALL-E 3!
           })
         });
 
@@ -217,9 +229,8 @@ export async function onRequest(context) {
         }
 
         // SAVE AND SEND
-        // OpenAI now provides a direct URL at aiData.data[0].url
         const finalResponseJSON = JSON.stringify({
-          imageUrl: aiData.data[0].url,
+          imageUrl: `data:image/png;base64,${aiData.data[0].b64_json}`,
           message: displayMessage
         });
 
@@ -232,7 +243,4 @@ export async function onRequest(context) {
     } catch (err) {
         return new Response(JSON.stringify({ imageUrl: "", message: `Worker crashed: ${err.message}` }), { headers: corsHeaders });
     }
-  }
-};
-
-
+ }
