@@ -214,11 +214,10 @@
             'Authorization': `Bearer ${env.OPENAI_API_KEY}`
           },
           body: JSON.stringify({
-            model: "dall-e-3", // I am so sorry for leading you astray here earlier!
+            model: "gpt-image-1-mini", 
             prompt: aiPrompt,
             n: 1,
-            size: "1024x1024",
-            response_format: "b64_json" // Safe to add back for DALL-E 3!
+            size: "1024x1024"
           })
         });
 
@@ -229,6 +228,7 @@
         }
 
         // SAVE AND SEND
+        // GPT Image models always return base64-encoded images by default!
         const finalResponseJSON = JSON.stringify({
           imageUrl: `data:image/png;base64,${aiData.data[0].b64_json}`,
           message: displayMessage
