@@ -196,39 +196,43 @@ export async function onRequest(context) {
 
     try {
         const openAIResponse = await fetch('https://api.openai.com/v1/images/generations', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${env.OPENAI_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: "gpt-image",
-                prompt: aiPrompt,
-                n: 1,
-                size: "1024x1024",
-                response_format: "b64_json"
-            })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${env.OPENAI_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "gpt-image",
+            prompt: aiPrompt,
+            n: 1,
+            size: "1024x1024"
+            // response_format line removed!
+          })
         });
 
         const aiData = await openAIResponse.json();
         
         if (aiData.error) {
-            return new Response(JSON.stringify({ imageUrl: "", message: `OpenAI Error: ${aiData.error.message}` }), { status: 500 });
+           return new Response(JSON.stringify({ imageUrl: "", message: `OpenAI Error: ${aiData.error.message}` }), { headers: corsHeaders });
         }
 
         // SAVE AND SEND
+        // OpenAI now provides a direct URL at aiData.data[0].url
         const finalResponseJSON = JSON.stringify({
-            imageUrl: `data:image/png;base64,${aiData.data[0].b64_json}`,
-            message: displayMessage
+          imageUrl: aiData.data[0].url,
+          message: displayMessage
         });
 
         await env.DAILY_STORE.put(today, finalResponseJSON);
 
         return new Response(finalResponseJSON, {
-            headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
         });
 
     } catch (err) {
-        return new Response(JSON.stringify({ imageUrl: "", message: `Worker crashed: ${err.message}` }), { status: 500 });
+        return new Response(JSON.stringify({ imageUrl: "", message: `Worker crashed: ${err.message}` }), { headers: corsHeaders });
     }
-}
+  }
+};
+
+
